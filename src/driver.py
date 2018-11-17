@@ -1,7 +1,13 @@
 import sys
 import pickle
+<<<<<<< HEAD
 
 from sklearn.externals import joblib
+=======
+import numpy as np
+from sklearn import tree
+from sklearn.metrics import accuracy_score
+>>>>>>> 77c5dc2d0a8072bdb14fc76105b70389d79daafd
 import decision_tree as dt
 #import naive_bayes as nb
 
@@ -35,8 +41,12 @@ with open(fp_train, 'r') as file:
 		train_data = train_data[0:-1]
 
 train_data = [[int(element) for element in row] for row in train_data]
-train_features = [d[:-1] for d in train_data]
-train_labels = [d[-1] for d in train_data]
+#get rid of possible newline character at end of list
+if(train_data[-1] == ['']):
+    train_data.pop()
+
+train_features = np.array([d[:-1] for d in train_data], dtype=np.int32)
+train_labels = np.array([d[-1] for d in train_data], dtype=np.int32)
 training = {
 	"data": train_data, 
 	"features": train_features, 
@@ -49,8 +59,12 @@ with open(fp_val, 'r') as file:
 		val_data = val_data[0:-1]
 
 val_data = [[int(element) for element in row] for row in val_data]
-val_features = [d[:-1] for d in val_data]
-val_labels = [d[-1] for d in val_data]
+#get rid of newline character at end of list
+if(val_data[-1] == ['']):
+    val_data.pop()
+
+val_features =  np.array([d[:-1] for d in val_data], dtype=np.int32)
+val_labels = np.array([d[-1] for d in val_data], dtype=np.int32)
 validation = {
 	"data": val_data,
 	"features": val_features,
@@ -58,7 +72,7 @@ validation = {
 }
 
 """
-Run algorithms
+Run training algorithms
 """
 if "dt" in alg_option:
 	### Run decision tree
@@ -72,6 +86,10 @@ if "dt" in alg_option:
 	### Save model
 	joblib.dump(dt_clf, fp_dt_mdl)
 
+	###Display accuracy
+	accuracy = accuracy_score(val_labels, dt_predicted)
+	print("The training accuracy of Decision Tree was {}".format(accuracy))
+
 if "nb" in alg_option:
 	### Run Naive Bayes
 	nb_clf, nb_predicted = nb.naive_bayes(training, validation)
@@ -84,6 +102,10 @@ if "nb" in alg_option:
 	### Save model
 	joblib.dump(nb_clf, fp_nb_mdl)
 
+	###Display accuracy
+	accuracy = accuracy_score(val_labels, nb_predicted)
+	print("The training accuracy of Naive Bayes was {}".format(accuracy))
+
 if "3" in alg_option:
 	### Run Placeholder
 	ph_clf, ph_predicted = placeholder(training, validation)
@@ -95,5 +117,9 @@ if "3" in alg_option:
 
 	### Save model
 	joblib.dump(ph_clf, fp_ph_mdl)
+
+	###Display accuracy
+	accuracy = accuracy_score(val_labels, ph_predicted)
+	print("The training accuracy of PLACEHOLDER was {}".format(accuracy))
 
 
