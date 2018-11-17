@@ -4,13 +4,13 @@ from sklearn.metrics import accuracy_score
 import numpy as np
 
 def naive_bayes_training(training, validation):
-    ########MODEL TRAINING##########################
     classifier = naive_bayes.BernoulliNB(alpha=0.5)
     classifier.fit(training["features"], training["labels"])
 
     validation_predicted = classifier.predict(validation["features"])
 
     return validation_predicted
+
 
 """
 #############TRAINING DATA###################
