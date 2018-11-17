@@ -7,6 +7,7 @@ from sklearn.metrics import accuracy_score
 
 import decision_tree as dt
 #import naive_bayes as nb
+import linear_svc as ls
 
 """
 Read command line arguments
@@ -23,11 +24,11 @@ fp_val    = "../data/ds" + ds_option + "/ds" + ds_option + "Val.csv"
 ### Output
 fp_dt_out = "../output/ds" + ds_option + "Test-dt.csv"
 fp_nb_out = "../output/ds" + ds_option + "Test-nb.csv"
-fp_ph_out = "../output/ds" + ds_option + "Test-ph.csv" ### Placeholder
+fp_ls_out = "../output/ds" + ds_option + "Test-3.csv" ### Placeholder
 
 fp_dt_mdl = "../models/ds" + ds_option + "/dt_mdl.pkl" 
 fp_nb_mdl = "../models/ds" + ds_option + "/nb_mdl.pkl"
-fp_ph_mdl = "../models/ds" + ds_option + "/ph_mdl.pkl" ### Placeholder
+fp_ls_mdl = "../models/ds" + ds_option + "/l_svc_mdl.pkl" ### Placeholder
 
 """
 Read dataset
@@ -73,7 +74,7 @@ Run training algorithms
 """
 if "dt" in alg_option:
 	### Run decision tree
-	dt_clf, dt_predicted = dt.decision_tree(training, validation)
+	dt_clf, dt_predicted = dt.decision_tree_training(training, validation)
 
 	### Save predictions
 	with open(fp_dt_out, 'w') as file:
@@ -103,18 +104,18 @@ if "nb" in alg_option:
 	accuracy = accuracy_score(val_labels, nb_predicted)
 	print("The training accuracy of Naive Bayes was {}".format(accuracy))
 
-if "3" in alg_option:
+if "ls" in alg_option:
 	### Run Placeholder
-	ph_clf, ph_predicted = placeholder(training, validation)
+	ls_clf, ls_predicted = ls.linear_svc_training(training, validation)
 
 	### Save predictions
-	with open(fp_ph_out, 'w') as file:
-		for i in range(len(ph_predicted)):
-			file.write('%d,%d\n' % (i + 1, ph_predicted[i]))
+	with open(fp_ls_out, 'w') as file:
+		for i in range(len(ls_predicted)):
+			file.write('%d,%d\n' % (i + 1, ls_predicted[i]))
 
 	### Save model
-	joblib.dump(ph_clf, fp_ph_mdl)
+	joblib.dump(ls_clf, fp_ls_mdl)
 
 	###Display accuracy
-	accuracy = accuracy_score(val_labels, ph_predicted)
-	print("The training accuracy of PLACEHOLDER was {}".format(accuracy))
+	accuracy = accuracy_score(val_labels, ls_predicted)
+	print("The training accuracy of LINEAR SVC was {}".format(accuracy))

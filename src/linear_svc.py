@@ -1,7 +1,7 @@
-from sklearn import tree
+from sklearn import svm
 
-def decision_tree_training(training, validation):
-	classifier = tree.DecisionTreeClassifier()
+def linear_svc_training(training, validation):
+	classifier = svm.SVC(kernel='linear')
 	classifier.fit(training["features"], training["labels"])
 
 	validation_predicted = classifier.predict(validation["features"])
