@@ -6,6 +6,7 @@ def decision_tree(training, validation):
 	classifier.fit(training["features"], training["labels"])
 
 	validation_predicted = classifier.predict(validation["features"])
-	accuracy_score = accuracy_score(validation["labels"], validation_predicted)
+	accuracy = accuracy_score(validation["labels"], validation_predicted)
+	print(accuracy)
 
-	return validation_predicted
+	return classifier, validation_predicted

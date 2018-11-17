@@ -1,8 +1,9 @@
 import sys
 import pickle
-from sklearn import tree
+
+from sklearn.externals import joblib
 import decision_tree as dt
-import naive_bayes as nb
+#import naive_bayes as nb
 
 """
 Read command line arguments
@@ -21,9 +22,9 @@ fp_dt_out = "../output/ds" + ds_option + "Test-dt.csv"
 fp_nb_out = "../output/ds" + ds_option + "Test-nb.csv"
 fp_ph_out = "../output/ds" + ds_option + "Test-ph.csv" ### Placeholder
 
-fp_dt_mdl = "../models/dt_mdl.pkl"
-fp_nb_mdl = "../models/nb_mdl.pkl"
-fp_ph_mdl = "../models/ph_mdl.pkl" ### Placeholder
+fp_dt_mdl = "../models/ds" + ds_option + "/dt_mdl.pkl" 
+fp_nb_mdl = "../models/ds" + ds_option + "/nb_mdl.pkl"
+fp_ph_mdl = "../models/ds" + ds_option + "/ph_mdl.pkl" ### Placeholder
 
 """
 Read dataset
@@ -61,28 +62,38 @@ Run algorithms
 """
 if "dt" in alg_option:
 	### Run decision tree
-	dt_predicted = dt.decision_tree(training, validation)
+	dt_clf, dt_predicted = dt.decision_tree(training, validation)
+
 	### Save predictions
 	with open(fp_dt_out, 'w') as file:
 		for i in range(len(dt_predicted)):
 			file.write('%d,%d\n' % (i + 1, dt_predicted[i]))
+
 	### Save model
-	
+	joblib.dump(dt_clf, fp_dt_mdl)
+
 if "nb" in alg_option:
 	### Run Naive Bayes
-	nb_predicted = nb.naive_bayes(training, validation)
+	nb_clf, nb_predicted = nb.naive_bayes(training, validation)
+
 	### Save predictions
 	with open(fp_nb_out, 'w') as file:
 		for i in range(len(nb_predicted)):
 			file.write('%d,%d\n' % (i + 1, nb_predicted[i]))
+
 	### Save model
+	joblib.dump(nb_clf, fp_nb_mdl)
+
 if "3" in alg_option:
 	### Run Placeholder
-	ph_predicted = placeholder(training, validation)
+	ph_clf, ph_predicted = placeholder(training, validation)
+
 	### Save predictions
 	with open(fp_ph_out, 'w') as file:
 		for i in range(len(ph_predicted)):
 			file.write('%d,%d\n' % (i + 1, ph_predicted[i]))
+
 	### Save model
+	joblib.dump(ph_clf, fp_ph_mdl)
 
 
