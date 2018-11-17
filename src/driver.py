@@ -1,7 +1,8 @@
 import sys
-import pickle
-import numpy as np
+
 from sklearn.externals import joblib
+import numpy as np
+from sklearn import tree
 from sklearn.metrics import accuracy_score
 
 import decision_tree as dt
