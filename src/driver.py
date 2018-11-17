@@ -1,15 +1,11 @@
 import sys
 import pickle
-<<<<<<< HEAD
-
-from sklearn.externals import joblib
-=======
 import numpy as np
-from sklearn import tree
+from sklearn.externals import joblib
 from sklearn.metrics import accuracy_score
->>>>>>> 77c5dc2d0a8072bdb14fc76105b70389d79daafd
+
 import decision_tree as dt
-#import naive_bayes as nb
+import naive_bayes as nb
 
 """
 Read command line arguments
@@ -23,14 +19,23 @@ Set file path parameters
 ### Input
 fp_train  = "../data/ds" + ds_option + "/ds" + ds_option + "Train.csv"
 fp_val    = "../data/ds" + ds_option + "/ds" + ds_option + "Val.csv"
-### Output
-fp_dt_out = "../output/ds" + ds_option + "Test-dt.csv"
-fp_nb_out = "../output/ds" + ds_option + "Test-nb.csv"
-fp_ph_out = "../output/ds" + ds_option + "Test-ph.csv" ### Placeholder
+fp_test   = "../data/ds" + ds_option + "/ds" + ds_option + "Test.csv"
 
+### Validation Output
+fp_dt_val_out = "../output/ds" + ds_option + "Val-dt.csv"
+fp_nb_val_out = "../output/ds" + ds_option + "Val-nb.csv"
+fp_ph_val_out = "../output/ds" + ds_option + "Val-3.csv" ### Placeholder
+
+### Test Output
+fp_dt_test_out = "../output/ds" + ds_option + "Test-dt.csv"
+fp_nb_test_out = "../output/ds" + ds_option + "Test-nb.csv"
+fp_ph_test_out = "../output/ds" + ds_option + "Test-3.csv" ### Placeholder
+
+### Saved Models
 fp_dt_mdl = "../models/ds" + ds_option + "/dt_mdl.pkl" 
 fp_nb_mdl = "../models/ds" + ds_option + "/nb_mdl.pkl"
 fp_ph_mdl = "../models/ds" + ds_option + "/ph_mdl.pkl" ### Placeholder
+
 
 """
 Read dataset
@@ -76,10 +81,10 @@ Run training algorithms
 """
 if "dt" in alg_option:
 	### Run decision tree
-	dt_clf, dt_predicted = dt.decision_tree(training, validation)
+	dt_clf, dt_predicted = dt.decision_tree_training(training, validation)
 
-	### Save predictions
-	with open(fp_dt_out, 'w') as file:
+	### Save predictions to output file
+	with open(fp_dt_val_out, 'w') as file:
 		for i in range(len(dt_predicted)):
 			file.write('%d,%d\n' % (i + 1, dt_predicted[i]))
 
@@ -92,10 +97,10 @@ if "dt" in alg_option:
 
 if "nb" in alg_option:
 	### Run Naive Bayes
-	nb_clf, nb_predicted = nb.naive_bayes(training, validation)
+	nb_clf, nb_predicted = nb.naive_bayes_training(training, validation)
 
-	### Save predictions
-	with open(fp_nb_out, 'w') as file:
+	### Save predictions to output file
+	with open(fp_nb_val_out, 'w') as file:
 		for i in range(len(nb_predicted)):
 			file.write('%d,%d\n' % (i + 1, nb_predicted[i]))
 
@@ -110,8 +115,8 @@ if "3" in alg_option:
 	### Run Placeholder
 	ph_clf, ph_predicted = placeholder(training, validation)
 
-	### Save predictions
-	with open(fp_ph_out, 'w') as file:
+	### Save predictions to output file
+	with open(fp_ph_val_out, 'w') as file:
 		for i in range(len(ph_predicted)):
 			file.write('%d,%d\n' % (i + 1, ph_predicted[i]))
 
