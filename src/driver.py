@@ -3,7 +3,7 @@ import sys
 from sklearn.externals import joblib
 import numpy as np
 from sklearn import tree
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, confusion_matrix
 
 import decision_tree as dt
 import naive_bayes as nb
@@ -124,6 +124,11 @@ def main():
 				###Display accuracy
 				accuracy = accuracy_score(val_labels, dt_predicted)
 				print("The training accuracy of Decision Tree was {}".format(accuracy))
+
+				###Test confusion matrix
+				confusion = confusion_matrix(val_labels, dt_predicted)
+				for x in confusion:
+					print(x)
 
 			if "nb" in alg_option:
 				print("Training Naive Bayes...")
