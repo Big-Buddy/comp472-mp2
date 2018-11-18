@@ -7,7 +7,7 @@ from sklearn.metrics import accuracy_score, confusion_matrix
 
 import decision_tree as dt
 import naive_bayes as nb
-import linear_svc as ls
+import svc as ls
 
 def main():
 	while(True):
@@ -54,7 +54,7 @@ def main():
 		alg_input = input("Which algorithm would you like to use?\n"
 						"1. Decision Tree\n"
 						"2. Naive Bayes\n"
-						"3. Linear SVC\n")
+						"3. SVC\n")
 		
 		if(alg_input == '1'):
 			alg_option = 'dt'
@@ -152,10 +152,10 @@ def main():
 				
 
 			if "ls" in alg_option:
-				print("Training Linear SVC...")
+				print("Training SVC...")
 
 				### Run Placeholder
-				ls_clf, ls_predicted = ls.linear_svc_training(training, validation, ds_option)
+				ls_clf, ls_predicted = ls.svc_training(training, validation, ds_option)
 
 				### Save predictions to output file
 				with open(fp_ls_val_out, 'w') as file:
@@ -167,7 +167,7 @@ def main():
 
 				###Display accuracy
 				accuracy = accuracy_score(val_labels, ls_predicted)
-				print("The training accuracy of Linear SVC was {}".format(accuracy))
+				print("The training accuracy of SVC was {}".format(accuracy))
 
 
 		################################################## TESTING ########################################################
@@ -227,7 +227,7 @@ def main():
 				model = joblib.load(fp_ls_mdl)
 
 				### Run Placeholder
-				ls_predicted = ls.linear_svc_testing(model, testing)
+				ls_predicted = ls.svc_testing(model, testing)
 
 				### Save predictions
 				with open(fp_ls_test_out, 'w') as file:
