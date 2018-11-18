@@ -1,7 +1,4 @@
 from sklearn import naive_bayes
-from sklearn.metrics import accuracy_score
-
-import numpy as np
 
 def naive_bayes_training(training, validation):
     classifier = naive_bayes.BernoulliNB(alpha=0.5)
@@ -9,5 +6,9 @@ def naive_bayes_training(training, validation):
 
     validation_predicted = classifier.predict(validation["features"])
 
-    return validation_predicted
+    return classifier, validation_predicted
 
+def naive_bayes_testing(model, testing):
+    testing_predicted = model.predict(testing)
+    return testing_predicted
+    
