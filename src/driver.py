@@ -34,12 +34,12 @@ def main():
 		### Validation Output
 		fp_dt_val_out = "../output/ds" + ds_option + "Val-dt.csv"
 		fp_nb_val_out = "../output/ds" + ds_option + "Val-nb.csv"
-		fp_ph_val_out = "../output/ds" + ds_option + "Val-3.csv"
+		fp_ls_val_out = "../output/ds" + ds_option + "Val-3.csv"
 
 		### Test Output
 		fp_dt_test_out = "../output/ds" + ds_option + "Test-dt.csv"
 		fp_nb_test_out = "../output/ds" + ds_option + "Test-nb.csv"
-		fp_ph_test_out = "../output/ds" + ds_option + "Test-3.csv"
+		fp_ls_test_out = "../output/ds" + ds_option + "Test-3.csv"
 
 		### Saved Models
 		fp_dt_mdl = "../models/ds" + ds_option + "/dt_mdl.pkl" 
@@ -153,7 +153,7 @@ def main():
 				print("Training Linear SVC...")
 
 				### Run Placeholder
-				ls_clf, ls_predicted = placeholder(training, validation)
+				ls_clf, ls_predicted = ls.linear_svc_training(training, validation)
 
 				### Save predictions to output file
 				with open(fp_ls_val_out, 'w') as file:
@@ -225,10 +225,10 @@ def main():
 				model = joblib.load(fp_ls_mdl)
 
 				### Run Placeholder
-				ls_clf, ls_predicted = ls.linear_svc_training(model, validation)
+				ls_predicted = ls.linear_svc_testing(model, testing)
 
 				### Save predictions
-				with open(fp_ls_out, 'w') as file:
+				with open(fp_ls_test_out, 'w') as file:
 					for i in range(len(ls_predicted)):
 						file.write('%d,%d\n' % (i + 1, ls_predicted[i]))
 				print("Predictions have been saved to " + fp_ls_test_out)

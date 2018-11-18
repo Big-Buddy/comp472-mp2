@@ -7,3 +7,7 @@ def linear_svc_training(training, validation):
 	validation_predicted = classifier.predict(validation["features"])
 
 	return classifier, validation_predicted
+
+def linear_svc_testing(model, testing):
+    testing_predicted = model.predict(testing)
+    return testing_predicted
