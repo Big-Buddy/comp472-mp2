@@ -1,13 +1,13 @@
 from sklearn import tree
 
 ds1_parameters = {
-    "max_depth": 60, 		#or None
-	"criterion": 'entropy' 	#or 'entropy'
+    "max_depth": 20, 		#int or None
+	"criterion": 'entropy' 	#'gini' or 'entropy'
 }
 
 ds2_parameters = {
-    "max_depth": 10,		#or None
-	"criterion": 'gini' 	#or 'entropy'
+    "max_depth": 25,		#int or None
+	"criterion": 'gini' 	#'gini' or 'entropy'
 }
 
 def decision_tree_training(training, validation, dataset):

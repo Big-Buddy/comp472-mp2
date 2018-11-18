@@ -5,7 +5,7 @@ ds1_parameters = {
 }
 
 ds2_parameters = {
-    "alpha": 0.1
+    "alpha": 0
 }
 
 def naive_bayes_training(training, validation, dataset):
