@@ -16,7 +16,7 @@ def svc_training(training, validation, dataset):
 	if(dataset == '1'):
 		classifier = svm.SVC(kernel=ds1_parameters["kernel"], degree=ds1_parameters["degree"], gamma=ds1_parameters["gamma"])
 	else:
-		classifier = svm.SVC(kernel=ds2_parameters["kernel"], degree=ds2_parameters["degree"], gamma=ds1_parameters["gamma"])
+		classifier = svm.SVC(kernel=ds2_parameters["kernel"], degree=ds2_parameters["degree"], gamma=ds2_parameters["gamma"])
 		
 	classifier.fit(training["features"], training["labels"])
 	validation_predicted = classifier.predict(validation["features"])
