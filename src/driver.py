@@ -7,6 +7,7 @@ from sklearn.metrics import accuracy_score, confusion_matrix
 
 import decision_tree as dt
 import naive_bayes as nb
+import linear_svc as ls
 
 def main():
 	while(True):
@@ -33,17 +34,17 @@ def main():
 		### Validation Output
 		fp_dt_val_out = "../output/ds" + ds_option + "Val-dt.csv"
 		fp_nb_val_out = "../output/ds" + ds_option + "Val-nb.csv"
-		fp_ph_val_out = "../output/ds" + ds_option + "Val-3.csv" ### Placeholder
+		fp_ph_val_out = "../output/ds" + ds_option + "Val-3.csv"
 
 		### Test Output
 		fp_dt_test_out = "../output/ds" + ds_option + "Test-dt.csv"
 		fp_nb_test_out = "../output/ds" + ds_option + "Test-nb.csv"
-		fp_ph_test_out = "../output/ds" + ds_option + "Test-3.csv" ### Placeholder
+		fp_ph_test_out = "../output/ds" + ds_option + "Test-3.csv"
 
 		### Saved Models
 		fp_dt_mdl = "../models/ds" + ds_option + "/dt_mdl.pkl" 
 		fp_nb_mdl = "../models/ds" + ds_option + "/nb_mdl.pkl"
-		fp_ph_mdl = "../models/ds" + ds_option + "/ph_mdl.pkl" ### Placeholder
+		fp_ls_mdl = "../models/ds" + ds_option + "/ls_mdl.pkl"
 
 
 		train_test_input = input("Would you like to train or test? \n"
@@ -53,14 +54,14 @@ def main():
 		alg_input = input("Which algorithm would you like to use?\n"
 						"1. Decision Tree\n"
 						"2. Naive Bayes\n"
-						"3. PLACEHOLDER\n")
+						"3. Linear SVC\n")
 		
 		if(alg_input == '1'):
 			alg_option = 'dt'
 		elif(alg_input == '2'):
 			alg_option = 'nb'
 		else:
-			alg_option = '3'
+			alg_option = 'ls'
 
 		####################################################### TRAINING ########################################################
 		if(train_test_input == '1'):
@@ -148,23 +149,23 @@ def main():
 				accuracy = accuracy_score(val_labels, nb_predicted)
 				print("The training accuracy of Naive Bayes was {}".format(accuracy))
 
-			if "3" in alg_option:
-				print("Training PLACEHOLDER...")
+			if "ls" in alg_option:
+				print("Training Linear SVC...")
 
 				### Run Placeholder
-				ph_clf, ph_predicted = placeholder(training, validation)
+				ls_clf, ls_predicted = placeholder(training, validation)
 
 				### Save predictions to output file
-				with open(fp_ph_val_out, 'w') as file:
-					for i in range(len(ph_predicted)):
-						file.write('%d,%d\n' % (i + 1, ph_predicted[i]))
+				with open(fp_ls_val_out, 'w') as file:
+					for i in range(len(ls_predicted)):
+						file.write('%d,%d\n' % (i + 1, ls_predicted[i]))
 
 				### Save model
-				joblib.dump(ph_clf, fp_ph_mdl)
+				joblib.dump(ls_clf, fp_ls_mdl)
 
 				###Display accuracy
-				accuracy = accuracy_score(val_labels, ph_predicted)
-				print("The training accuracy of PLACEHOLDER was {}".format(accuracy))
+				accuracy = accuracy_score(val_labels, ls_predicted)
+				print("The training accuracy of Linear SVC was {}".format(accuracy))
 
 
 		################################################## TESTING ########################################################
@@ -219,7 +220,18 @@ def main():
 				
 				print("Predictions have been saved to " + fp_nb_test_out)
 	
+			if "ls" in alg_option:
+				### Load model
+				model = joblib.load(fp_ls_mdl)
+
+				### Run Placeholder
+				ls_clf, ls_predicted = ls.linear_svc_training(model, validation)
+
+				### Save predictions
+				with open(fp_ls_out, 'w') as file:
+					for i in range(len(ls_predicted)):
+						file.write('%d,%d\n' % (i + 1, ls_predicted[i]))
+				print("Predictions have been saved to " + fp_ls_test_out)
 
 if __name__ == "__main__":
-    main()	
-	
+    main()
