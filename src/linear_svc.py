@@ -1,9 +1,20 @@
 from sklearn import svm
 
-def linear_svc_training(training, validation):
-	classifier = svm.SVC(kernel='linear')
-	classifier.fit(training["features"], training["labels"])
+ds1_parameters = {
+    "kernel": 'linear'
+}
 
+ds2_parameters = {
+    "kernel": 'linear'
+}
+
+def linear_svc_training(training, validation, dataset):
+	if(dataset == '1'):
+		classifier = svm.SVC(kernel=ds1_parameters["kernel"])
+	else:
+		classifier = svm.SVC(kernel=ds2_parameters["kernel"])
+		
+	classifier.fit(training["features"], training["labels"])
 	validation_predicted = classifier.predict(validation["features"])
 
 	return classifier, validation_predicted

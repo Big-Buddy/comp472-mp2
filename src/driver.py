@@ -112,7 +112,7 @@ def main():
 				print("Training Decision Tree...")
 
 				### Run decision tree
-				dt_clf, dt_predicted = dt.decision_tree_training(training, validation)
+				dt_clf, dt_predicted = dt.decision_tree_training(training, validation, ds_option)
 
 				### Save predictions to output file
 				with open(fp_dt_val_out, 'w') as file:
@@ -126,16 +126,11 @@ def main():
 				accuracy = accuracy_score(val_labels, dt_predicted)
 				print("The training accuracy of Decision Tree was {}".format(accuracy))
 
-				###Test confusion matrix
-				confusion = confusion_matrix(val_labels, dt_predicted)
-				for x in confusion:
-					print(x)
-
 			if "nb" in alg_option:
 				print("Training Naive Bayes...")
 
 				### Run Naive Bayes
-				nb_clf, nb_predicted = nb.naive_bayes_training(training, validation)
+				nb_clf, nb_predicted = nb.naive_bayes_training(training, validation, ds_option)
 
 				### Save predictions to output file
 				with open(fp_nb_val_out, 'w') as file:
@@ -144,16 +139,23 @@ def main():
 
 				### Save model
 				joblib.dump(nb_clf, fp_nb_mdl)
+				
+				###Test confusion matrix
+				confusion = confusion_matrix(val_labels, nb_predicted)
+				for x in confusion:
+					print(x)
 
 				###Display accuracy
 				accuracy = accuracy_score(val_labels, nb_predicted)
-				print("The training accuracy of Naive Bayes was {}".format(accuracy))
+				print("The training accuracy of Naive Bayes on ds{} was {}".format(ds_option, accuracy))
+
+				
 
 			if "ls" in alg_option:
 				print("Training Linear SVC...")
 
 				### Run Placeholder
-				ls_clf, ls_predicted = ls.linear_svc_training(training, validation)
+				ls_clf, ls_predicted = ls.linear_svc_training(training, validation, ds_option)
 
 				### Save predictions to output file
 				with open(fp_ls_val_out, 'w') as file:
