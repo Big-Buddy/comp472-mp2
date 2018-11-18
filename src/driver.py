@@ -1,9 +1,10 @@
 import sys
+import csv
 
 from sklearn.externals import joblib
 import numpy as np
 from sklearn import tree
-from sklearn.metrics import accuracy_score, confusion_matrix
+from sklearn.metrics import accuracy_score, precision_score, recall_score, confusion_matrix
 
 import decision_tree as dt
 import naive_bayes as nb
@@ -122,9 +123,10 @@ def main():
 				### Save model
 				joblib.dump(dt_clf, fp_dt_mdl)
 
-				###Display accuracy
-				accuracy = accuracy_score(val_labels, dt_predicted)
-				print("The training accuracy of Decision Tree was {}".format(accuracy))
+				### Display scores
+				print("Scores for Decision Tree on ds{}:".format(ds_option))
+				display_scores(dt_predicted, val_labels, alg_option, ds_option)
+
 
 			if "nb" in alg_option:
 				print("Training Naive Bayes...")
@@ -139,18 +141,12 @@ def main():
 
 				### Save model
 				joblib.dump(nb_clf, fp_nb_mdl)
-				
-				###Test confusion matrix
-				confusion = confusion_matrix(val_labels, nb_predicted)
-				for x in confusion:
-					print(x)
 
-				###Display accuracy
-				accuracy = accuracy_score(val_labels, nb_predicted)
-				print("The training accuracy of Naive Bayes on ds{} was {}".format(ds_option, accuracy))
+				### Display scores
+				print("Scores for Naive Bayes on ds{}:".format(ds_option))
+				display_scores(nb_predicted, val_labels, alg_option, ds_option)
 
 				
-
 			if "ls" in alg_option:
 				print("Training SVC...")
 
@@ -165,9 +161,10 @@ def main():
 				### Save model
 				joblib.dump(ls_clf, fp_ls_mdl)
 
-				###Display accuracy
-				accuracy = accuracy_score(val_labels, ls_predicted)
-				print("The training accuracy of SVC was {}".format(accuracy))
+				### Display scores
+				print("Scores for SVC on ds{}:".format(ds_option))
+				display_scores(ls_predicted, val_labels, alg_option, ds_option)
+	
 
 
 		################################################## TESTING ########################################################
@@ -234,6 +231,51 @@ def main():
 					for i in range(len(ls_predicted)):
 						file.write('%d,%d\n' % (i + 1, ls_predicted[i]))
 				print("Predictions have been saved to " + fp_ls_test_out)
+
+
+
+def display_scores(predicted_labels, true_labels, model_name, dataset):
+	### Generate file name for confusion matrix
+	confusion_matrix_out = "../matrix/ds" + dataset + "-maxtrix-" + model_name + ".csv"
+	
+	### Calculate scores
+	accuracy = accuracy_score(true_labels, predicted_labels)
+	precision = precision_score(true_labels, predicted_labels, average='weighted')
+	recall = recall_score(true_labels, predicted_labels, average='weighted')
+
+	### Display scores
+	print("Accuracy: {}".format(accuracy))
+	print("Precision (weighted average): {}".format(precision))
+	print("Recall (weighted average): {}".format(recall))
+
+	### Generate confusion matrix
+	if dataset == '1':
+		matrix_labels = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 
+			  10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 
+			  20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 
+			  30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 
+			  40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 
+			  50]	
+	else:
+		matrix_labels = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+	confusion = confusion_matrix(true_labels, predicted_labels, labels=matrix_labels)
+	confusion_list = (confusion.astype(int)).tolist()
+	
+	### Add row and column labels to confusion list
+	confusion_list.insert(0, matrix_labels)
+	for index, row in enumerate(confusion_list):
+		if index == 0:
+			row.insert(0, '')
+		else:
+			row.insert(0, matrix_labels[index])
+
+	### Save confusion matrix
+	with open(confusion_matrix_out, 'w', newline='') as myfile:
+		wr = csv.writer(myfile)
+		wr.writerows(confusion_list)
+
+
 
 if __name__ == "__main__":
     main()
